@@ -1,3 +1,7 @@
+// Used to send to backend
+let token = null; // token to represent current user
+let coords = { x: 0, y: 0 }; // co-ordinates of current user
+
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
@@ -103,3 +107,13 @@ function gameLoop(time) {
 
 resizeCanvas();
 requestAnimationFrame(gameLoop);
+
+// Connect to the backend
+async function connect_to_backend() {
+  await joinGame(); // join the game, receiving a unique ID token
+
+  setInterval(() => { // every 100ms, send my co-ordinates and receive a list of all players' co-ordinates
+    updateLoop();
+  }, 100); // 100ms
+};
+connect_to_backend();
