@@ -1,0 +1,11 @@
+{
+  "name": "spaceship-browser-game",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
