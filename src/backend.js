@@ -1,5 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
+const { PlayerInfo } = require('./classes');
 
 const router = express.Router();
 
@@ -15,27 +16,29 @@ router.post('/join', (req, res) => {
     y: Math.floor(Math.random() * 65535)
   };
 
-  players[token] = initialCoords;
+  var newPlayer = PlayerInfo(token, initialCoords);
+
+  players[token] = newPlayer;
 
   res.json({
     token,
-    coords: initialCoords
+    info: players
   });
 });
 
 // POST / → update player coords and return all players
 router.post('/', (req, res) => {
-  const { token, coords } = req.body;
+  const { token } = req.body;
 
-  if (!token || !coords) {
-    return res.status(400).json({ error: "token and coords required" });
-  }
+//   if (!token || !coords) {
+//     return res.status(400).json({ error: "token and coords required" });
+//   }
 
-  if (!players[token]) {
-    return res.status(404).json({ error: "unknown player token" });
-  }
+//   if (!players[token]) {
+//     return res.status(404).json({ error: "unknown player token" });
+//   }
 
-  players[token] = coords;
+//   players[token] = coords;
 
   res.json({ players });
 });
