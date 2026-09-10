@@ -34,10 +34,10 @@ function updatePositions() {
         // position moves per velocity
         eachPlayer.position.x += eachPlayer.velocity.x / timesPerSecond;
         eachPlayer.position.y += eachPlayer.velocity.y / timesPerSecond;
-        if (eachPlayer.position.x > worldBoundaryL) eachPlayer.position.x -= worldBoundaryL; // strange error when velocity >> worldBoundaryL
-        if (eachPlayer.position.y > worldBoundaryL) eachPlayer.position.y -= worldBoundaryL;
-        if (eachPlayer.position.x < 0) eachPlayer.position.x += worldBoundaryL;
-        if (eachPlayer.position.y < 0) eachPlayer.position.y += worldBoundaryL;
+        if (eachPlayer.position.x > worldBoundaryLen) eachPlayer.position.x -= worldBoundaryLen; // strange error when velocity >> worldBoundaryL
+        if (eachPlayer.position.y > worldBoundaryLen) eachPlayer.position.y -= worldBoundaryLen;
+        if (eachPlayer.position.x < 0) eachPlayer.position.x += worldBoundaryLen;
+        if (eachPlayer.position.y < 0) eachPlayer.position.y += worldBoundaryLen;
         // velocity changes iff firing thruster
         if (eachPlayer.firing_thruster) {
             eachPlayer.velocity.x += thrusterEffect * lx;
@@ -94,8 +94,8 @@ function insertPlayer(token) {
         y: Math.floor(Math.random() * 65535)
     };
 
-    var newPlayer = PlayerInfo(token, initialCoords);
-    players
+    var newPlayer = new PlayerInfo(token, initialCoords);
+    players.set(token, newPlayer);
 }
 
 function updatePlayerActions(token, angle, isThruster, isLaser) {

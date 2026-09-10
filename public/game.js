@@ -12,7 +12,6 @@ let particles = [];
 let seenExplosion = null;
 const keys = { thrust: false, laser: false };
 const mouse = { x: width / 2, y: height / 2 };
-const token = -1;
 
 function resizeCanvas() {
   const ratio = devicePixelRatio || 1;

@@ -5,6 +5,7 @@ async function joinGame() {
     headers: { 'Content-Type': 'application/json' }
   });
 
+  console.log(res);
   const data = await res.json();
   token = data.token;
   coords = data.coords;

@@ -11,4 +11,4 @@ class PlayerInfo {
     }
 }
 
-module.exports = PlayerInfo;
+module.exports = { PlayerInfo };
