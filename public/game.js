@@ -52,6 +52,7 @@ function worldToScreen(position) {
 }
 
 function sendInput() {
+  // commented out this condition b/c it wouldn't send - perhaps we ought to
   // if (!state || !playerCraft()?.alive) return;
   fetch('/', {
     method: 'POST',
@@ -62,8 +63,9 @@ function sendInput() {
       firing_thruster: keys.thrust,
       firing_laser: keys.laser
     })
-  }).catch((response) => {
-    const data = response.json();
+  }).then((response) => {
+    return response.json()
+  }).then((data) => {
     console.log(data);
     // at this point, you receive a bunch of data from the backend,
     // of the form:

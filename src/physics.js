@@ -132,8 +132,6 @@ function getPlayerInfo() {
         };
     }
 
-    console.log("out: ", out);
-
     return out;
 }
 
