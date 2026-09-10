@@ -1,6 +1,6 @@
 /* Thank you. Now, please implement the following changes:
 
--Give the spacecraft a temperature attribute, which starts at 300 and causes the craft to explode if it reaches 800. It should slowly increase linearly when the thruster is being fired or if it is in the path of a laser beam, and decrease at a rate proportional to T^4 to simulate radiative cooling.
+
 
 -When the craft explodes, it should become invisible and generate some pieces of shrapnel and gas particles which fly away from the craft's position. After 4 seconds, the particles stop rendering and the screen fades to black, printing this message across the screen 1 letter at a time:
 
@@ -10,7 +10,7 @@
 // - N Babusis
 
 // In-memory store of players: { token: { x, y } }
-const players = {};
+const players = new Map();
 
 const { PlayerInfo } = require('./classes');
 
@@ -27,7 +27,8 @@ const laserTempEffect = 40;
 
 // Function to update player info based on physics
 function updatePositions() {
-    for (var eachPlayer of players) {
+    toRemove = [];
+    for (var eachPlayer of players.values()) {
         const lx = Math.cos(eachPlayer.rotation);
         const ly = Math.sin(eachPlayer.rotation);
         // position moves per velocity
@@ -74,9 +75,16 @@ function updatePositions() {
         if (eachPlayer.time_since_explode >= 0) {
             eachPlayer.time_since_explode += 1 / timesPerSecond;
         }
-        if (eachPlayer.temperature >= maxTemp) {
+        if (eachPlayer.time_since_explode < 0 && eachPlayer.temperature >= maxTemp) {
             eachPlayer.time_since_explode = 0;
         }
+        if (eachPlayer.time_since_explode >= 4) {
+            toRemove.push(eachPlayer.token);
+        }
+    }
+    // Remove players outside of iteration on the set
+    for (eachToken of toRemove) {
+        players.delete(eachToken);
     }
 }
 
@@ -87,6 +95,7 @@ function insertPlayer(token) {
     };
 
     var newPlayer = PlayerInfo(token, initialCoords);
+    players
 }
 
 function updatePlayerActions(token, angle, isThruster, isLaser) {
