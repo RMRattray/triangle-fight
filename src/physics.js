@@ -96,10 +96,11 @@ function insertPlayer(token) {
 
     var newPlayer = new PlayerInfo(token, initialCoords);
     players.set(token, newPlayer);
+    console.log("Added new player!  Players: ", players);
 }
 
 function updatePlayerActions(token, angle, isThruster, isLaser) {
-    const player = players[token];
+    const player = players.get(token);
     if (!player) return false;   // signal failure
 
     if (angle !== undefined) {
@@ -116,8 +117,26 @@ function updatePlayerActions(token, angle, isThruster, isLaser) {
 }
 
 function getPlayerInfo() {
-    return players;
+    const out = {};
+
+    for (const [token, p] of players.entries()) {
+        out[token] = {
+            token: p.token,
+            position: p.position,
+            rotation: p.rotation,
+            velocity: p.velocity,
+            firing_thruster: p.firing_thruster,
+            firing_laser: p.firing_laser,
+            time_since_explode: p.time_since_explode,
+            temperature: p.temperature
+        };
+    }
+
+    console.log("out: ", out);
+
+    return out;
 }
+
 
 module.exports = {
     updatePositions,

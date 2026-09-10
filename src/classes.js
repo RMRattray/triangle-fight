@@ -7,7 +7,7 @@ class PlayerInfo {
         this.firing_thruster = false;
         this.firing_laser = false;
         this.time_since_explode = -1;
-        this.temperature = 0;
+        this.temperature = 300;
     }
 }
 

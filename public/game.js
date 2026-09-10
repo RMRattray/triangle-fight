@@ -1,6 +1,6 @@
 // Used to send to backend
 let token = null; // token to represent current user
-let coords = { x: 0, y: 0 }; // co-ordinates of current user
+let allPlayerInfo = null;
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -52,8 +52,8 @@ function worldToScreen(position) {
 }
 
 function sendInput() {
-  if (!state || !playerCraft()?.alive) return;
-  fetch('/api/input', {
+  // if (!state || !playerCraft()?.alive) return;
+  fetch('/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -62,7 +62,37 @@ function sendInput() {
       firing_thruster: keys.thrust,
       firing_laser: keys.laser
     })
-  }).catch(() => {});
+  }).catch((response) => {
+    const data = response.json();
+    console.log(data);
+    // at this point, you receive a bunch of data from the backend,
+    // of the form:
+    /*
+      {
+        "token1" : {
+          token: "token1",
+          position: Object { x: 57614, y: 33828 },
+          rotation: 3.14159,
+          velocity: Object { x: 0, y: 0},
+          firing_thruster: false,
+          firing_laser: false,
+          time_since_explode: -1,
+          temperature: 300
+        },
+        "token2" : {
+          token: "token2",
+          position: Object { x: 48271, y: 65535 },
+          rotation: 3.14159,
+          velocity: Object { x: 0, y: 0},
+          firing_thruster: false,
+          firing_laser: false,
+          time_since_explode: -1,
+          temperature: 300
+        }
+      }
+    */
+   // and you'll want to do something with it!
+  });
 }
 
 addEventListener('resize', resizeCanvas);
@@ -93,7 +123,6 @@ addEventListener('blur', () => {
   keys.laser = false;
   sendInput();
 });
-setInterval(sendInput, 50);
 
 new EventSource('/api/events').onmessage = event => {
   state = JSON.parse(event.data);
@@ -338,8 +367,8 @@ requestAnimationFrame(frame);
 async function connect_to_backend() {
   await joinGame(); // join the game, receiving a unique ID token
 
-  setInterval(() => { // every 100ms, send my co-ordinates and receive a list of all players' co-ordinates
-    updateLoop();
-  }, 100); // 100ms
+  setInterval(() => { // every 100ms, send my info and receive a list of all players' co-ordinates
+    sendInput(); // use Nick's function here
+  }, 50); // and his preferred frequency
 };
 connect_to_backend();
